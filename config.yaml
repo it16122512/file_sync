@@ -1,0 +1,22 @@
+name: "SSL Sync"
+version: "1.0.0"
+slug: "ssl_sync"
+description: "Sync SSL certificates from NPM to Asterisk"
+arch:
+  - aarch64
+  - amd64
+  - armv7
+startup: once
+boot: manual
+
+map:
+  - ssl:rw
+  - addon_configs:rw
+
+options:
+  source_relative_path: "a0d7b954_nginxproxymanager/letsencrypt/live/npm-8"
+  dest_relative_path: "nginxproxymanager/live/npm-1"
+
+schema:
+  source_relative_path: str
+  dest_relative_path: str
