@@ -16,5 +16,3 @@ while true; do
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Ошибка при выполнении run.sh — повтор через 60 сек"
     sleep 60
 done
-
-fix(s6): use exec /run.sh to avoid suexec error
