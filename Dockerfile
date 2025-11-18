@@ -6,5 +6,7 @@ COPY run.sh /
 COPY config.yaml /
 COPY etc/ /etc/
 
+# Делаем исполняемыми скрипты
 RUN chmod a+x /run.sh /etc/services.d/ssl_sync/run /etc/services.d/ssl_sync/finish
 
+# CMD не нужен, s6-overlay автоматически запускает скрипты из /etc/services.d
