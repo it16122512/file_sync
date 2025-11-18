@@ -1,17 +1,20 @@
-name: "SSL Sync"
+name: File Sync SSL
 version: "1.0.0"
-slug: "ssl_sync"
-description: "Sync SSL certificates from NPM to Asterisk"
+slug: file_sync
+description: "Sync SSL certificates from Nginx Proxy Manager to Asterisk"
 arch:
   - aarch64
   - amd64
   - armv7
-startup: once
-boot: manual
+startup: application
+boot: auto
+hassio_api: true
+host_network: false
 
+# ← ЭТО САМОЕ ВАЖНОЕ!
 map:
+  - addon_configs:ro
   - ssl:rw
-  - addon_configs:rw
 
 options:
   source_relative_path: "a0d7b954_nginxproxymanager/letsencrypt/live/npm-8"
@@ -20,3 +23,4 @@ options:
 schema:
   source_relative_path: str
   dest_relative_path: str
+  
