@@ -1,3 +1,4 @@
+# Используем базовый образ HAOS
 ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:12
 FROM $BUILD_FROM
 
@@ -6,7 +7,10 @@ COPY run.sh /
 COPY config.yaml /
 COPY etc/ /etc/
 
-# Делаем исполняемыми скрипты
-RUN chmod a+x /run.sh /etc/services.d/ssl_sync/run /etc/services.d/ssl_sync/finish
+# Делаем исполняемыми нужные файлы
+RUN chmod a+x /run.sh \
+    && chmod a+x /etc/services.d/ssl_sync/run \
+    && chmod a+x /etc/services.d/ssl_sync/finish
 
-# CMD не нужен, s6-overlay автоматически запускает скрипты из /etc/services.d
+# CMD удаляем — s6-overlay автоматически запустит ваш сервис
+# CMD [ "/run.sh" ]  <- Удаляем!
