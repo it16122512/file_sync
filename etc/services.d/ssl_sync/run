@@ -1,9 +1,16 @@
 #!/usr/bin/with-contenv bash
+## file: etc/services.d/ssl_sync/run
+# Этот скрипт запускается s6-overlay как longrun-сервис
+
+# Перенаправляем весь вывод в логи аддона
 exec > /proc/1/fd/1 2>/proc/1/fd/2
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] SSL Sync service started"
 
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] SSL Sync сервис запущен — начинаем цикл"
+
+# Бесконечный цикл с синхронизацией каждые 5 минут
 while true; do
-    /run.sh
-    sleep 300
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Запуск синхронизации…"
+    /run.sh                     # ← ваш скрипт делает всю работу
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] Синхронизация завершена, спим 5 минут"
+    sleep 300                   # 300 секунд = 5 минут (можно 3600 = час)
 done
-
