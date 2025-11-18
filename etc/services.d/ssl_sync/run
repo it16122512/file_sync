@@ -1,18 +1,30 @@
-#!/usr/bin/with-contenv bash
-## file: etc/services.d/ssl_sync/run
-# Этот скрипт запускается s6-overlay и работает постоянно
+#!/bin/sh
+set -e
 
-# Перенаправляем stdout/stderr в логи аддона
-exec > /proc/1/fd/1 2>/proc/1/fd/2
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] SSL Sync starting..."
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Сервис SSL Sync запущен и работает в фоне"
+SRC="/addon_configs/a0d7b954_nginxproxymanager/letsencrypt/live/npm-8"
+DEST="/ssl/nginxproxymanager/live/npm-1"
 
-# Бесконечный цикл с периодическим запуском синхронизации
-while true; do
-    # Запускаем основной скрипт синхронизации
-    /run.sh
+# Проверяем существование источника
+if [ ! -d "$SRC" ]; then
+  echo "❌ Source folder not found: $SRC"
+  exit 1
+fi
 
-    # Пауза между запусками (в секундах)
-    # 300 = каждые 5 минут, можно поставить 3600 = каждый час
-    sleep 300
-done
+# Создаем папку назначения
+mkdir -p "$DEST"
+
+# Копируем сертификаты
+cp -f "$SRC/privkey.pem" "$DEST/" && echo "✅ privkey.pem copied"
+cp -f "$SRC/fullchain.pem" "$DEST/" && echo "✅ fullchain.pem copied"
+
+# Перезапуск Asterisk через Supervisor API
+if curl -s -f -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+   -X POST "http://supervisor/addons/b35499aa_asterisk/restart"; then
+  echo "✅ Asterisk addon restarted successfully"
+else
+  echo "⚠️  Failed to restart Asterisk addon"
+fi
+
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✅ SSL certificates synced: $SRC → $DEST"
