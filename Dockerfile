@@ -5,12 +5,12 @@ FROM $BUILD_FROM
 # Копируем файлы аддона
 COPY run.sh /
 COPY config.yaml /
-COPY etc/ /etc/
 
-# Делаем исполняемыми нужные файлы
-RUN chmod a+x /run.sh \
-    && chmod a+x /etc/services.d/ssl_sync/run \
-    && chmod a+x /etc/services.d/ssl_sync/finish
+# Устанавливаем curl для Supervisor API
+RUN apk add --no-cache curl
 
-# CMD удаляем — s6-overlay автоматически запустит ваш сервис
-# CMD [ "/run.sh" ]  <- Удаляем!
+# Делаем скрипт исполняемым
+RUN chmod a+x /run.sh
+
+# Запускаем напрямую без s6-overlay сложностей
+CMD ["/run.sh"]
