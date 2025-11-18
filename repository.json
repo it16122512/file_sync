@@ -1,0 +1,14 @@
+{
+  "name": "File Sync",
+  "slug": "file_sync",
+  "description": "Sync files between directories inside HAOS",
+  "url": "https://github.com/it16122512/file_sync",
+  "addons": [
+    {
+      "name": "File Sync",
+      "slug": "file_sync",
+      "description": "Sync files between directories inside HAOS",
+      "version": "1.0.0"
+    }
+  ]
+}
