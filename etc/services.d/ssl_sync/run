@@ -1,29 +1,9 @@
-#!/bin/bash
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] SSL Sync starting..."
+#!/usr/bin/with-contenv bash
+exec > /proc/1/fd/1 2>/proc/1/fd/2
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] SSL Sync service started"
 
-SRC="/addon_configs/a0d7b954_nginxproxymanager/letsencrypt/live/npm-8"
-DEST="/ssl/nginxproxymanager/live/npm-1"
+while true; do
+    /run.sh
+    sleep 300
+done
 
-# Проверяем существование источника
-if [ ! -d "$SRC" ]; then
-  echo "❌ Source folder not found: $SRC"
-  exit 1
-fi
-
-# Создаем папку назначения
-mkdir -p "$DEST"
-
-# Копируем сертификаты
-cp -f "$SRC/privkey.pem" "$DEST/" && echo "✅ privkey.pem copied"
-cp -f "$SRC/fullchain.pem" "$DEST/" && echo "✅ fullchain.pem copied"
-
-# Перезапуск Asterisk через Supervisor API
-if curl -s -f -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-   -X POST "http://supervisor/addons/b35499aa_asterisk/restart"; then
-  echo "✅ Asterisk addon restarted successfully"
-else
-  echo "⚠️ Failed to restart Asterisk addon"
-fi
-
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✅ SSL certificates synced"
-exit 0
