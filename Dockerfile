@@ -1,12 +1,11 @@
-# Используем простой Alpine вместо HA базового образа
-FROM alpine:3.18
+ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:12
+FROM $BUILD_FROM
 
-# Устанавливаем зависимости
-RUN apk add --no-cache curl bash
-
-# Копируем скрипты
 COPY run.sh /
-RUN chmod a+x /run.sh
+COPY config.yaml /
+COPY etc/ /etc/
 
-# Запускаем напрямую
-CMD ["/run.sh"]
+RUN chmod a+x /run.sh /etc/services.d/ssl_sync/run /etc/services.d/ssl_sync/finish
+
+# CMD/ENTRYPOINT не нужны, s6-overlay запустится сам как PID 1
+
