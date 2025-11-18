@@ -1,5 +1,7 @@
 # SSL Sync Addon
 
+Test
+
 Этот аддон синхронизирует SSL сертификаты Nginx Proxy Manager с Asterisk, полностью в рамках одного устройства HAOS.
 
 ## Настройки
