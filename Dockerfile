@@ -1,16 +1,12 @@
-# Используем базовый образ HAOS
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base:12
-FROM $BUILD_FROM
+# Используем простой Alpine вместо HA базового образа
+FROM alpine:3.18
 
-# Копируем файлы аддона
+# Устанавливаем зависимости
+RUN apk add --no-cache curl bash
+
+# Копируем скрипты
 COPY run.sh /
-COPY config.yaml /
-
-# Устанавливаем curl для Supervisor API
-RUN apk add --no-cache curl
-
-# Делаем скрипт исполняемым
 RUN chmod a+x /run.sh
 
-# Запускаем напрямую без s6-overlay сложностей
+# Запускаем напрямую
 CMD ["/run.sh"]
