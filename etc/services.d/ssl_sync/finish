@@ -1,0 +1,5 @@
+#!/bin/sh
+# etc/services.d/ssl_sync/finish
+# Скрипт выполняется при остановке сервиса
+echo "🔹 SSL Sync service stopped at $(date)"
+exit 0
