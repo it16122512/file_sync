@@ -22,8 +22,12 @@ mkdir -p "$DEST_DIR"
 cp -f "$SRC_DIR/privkey.pem" "$DEST_DIR/"
 cp -f "$SRC_DIR/fullchain.pem" "$DEST_DIR/"
 
-# Перезапуск Asterisk аддона
-ha addons restart b35499aa_asterisk
+# Перезапуск Asterisk через Supervisor API
+if curl -s -f -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+   -X POST "http://supervisor/addons/b35499aa_asterisk/restart"; then
+  echo "✅ Asterisk addon restarted successfully"
+else
+  echo "⚠️  Failed to restart Asterisk addon"
+fi
 
 echo "✅ SSL certificates synced: $SRC_DIR → $DEST_DIR"
-
