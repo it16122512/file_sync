@@ -1,6 +1,4 @@
-#!/bin/sh
-set -e
-
+#!/bin/bash
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] SSL Sync starting..."
 
 SRC="/addon_configs/a0d7b954_nginxproxymanager/letsencrypt/live/npm-8"
@@ -24,7 +22,8 @@ if curl -s -f -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
    -X POST "http://supervisor/addons/b35499aa_asterisk/restart"; then
   echo "✅ Asterisk addon restarted successfully"
 else
-  echo "⚠️  Failed to restart Asterisk addon"
+  echo "⚠️ Failed to restart Asterisk addon"
 fi
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✅ SSL certificates synced: $SRC → $DEST"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] ✅ SSL certificates synced"
+exit 0
